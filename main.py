@@ -4,6 +4,7 @@ from models.extraction_data import extract_data
 from models.selection_colonnes import select_columns
 from models.calcul_statistics import calculate_statistics
 from models.var_n import calculate_var_n
+from models.var_t import calculate_var_t
 
 folder = 'data/'
 ext = '.xls'
@@ -30,7 +31,8 @@ resume_statistique = pd.DataFrame(
 )
 
 # Tableau pour les valeurs VaR
-tableau_var = pd.DataFrame(index=[0.05, 0.025, 0.02, 0.015, 0.01, 0.005, 0.001])
+tableau_var_n = pd.DataFrame(index=[0.05, 0.025, 0.02, 0.015, 0.01, 0.005, 0.001])
+tableau_var_t = pd.DataFrame(index=[0.05, 0.025, 0.02, 0.015, 0.01, 0.005, 0.001])
 
 for i, data in enumerate(data_frames):
     # Extraction des données
@@ -41,11 +43,15 @@ for i, data in enumerate(data_frames):
     resume_statistique[colonnes[i]] = statistics[colonnes[i]]
 
     # Calcul de VaR
-    calculate_var_n(data, colonnes[i], tableau_var)
+    calculate_var_n(data, colonnes[i], tableau_var_n)
+    calculate_var_t(data, colonnes[i], tableau_var_t)
 
 # Affichage des tableaux
 print("\nTableau des statistiques récapitulatives:")
 print(resume_statistique)
 
-print("\nTableau VaR en fonction de alpha:")
-print(tableau_var)
+print("\nTableau VaR_N en fonction de alpha:")
+print(tableau_var_n)
+
+print("\nTableau VaR_T en fonction de alpha:")
+print(tableau_var_t)
